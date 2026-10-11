@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF OCR to Markdown"
+  short_description: "PDFs/images to Markdown"
+  default_prompt: "Use $pdf-ocr-to-markdown to OCR these files into Markdown sidecar outputs."

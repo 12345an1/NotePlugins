@@ -1,0 +1,56 @@
+{
+  "hooks": {
+    "Interrupt": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/save_progress.py\"",
+            "async": true,
+            "timeout": 30,
+            "additionalContextLimit": 10000
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/save_progress.py\"",
+            "async": true,
+            "timeout": 30,
+            "additionalContextLimit": 10000
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/session_end.py\"",
+            "timeout": 30,
+            "additionalContextLimit": 10000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "shell|local_shell|exec_command|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/cleanup_completed_runs.py\"",
+            "async": true,
+            "timeout": 180,
+            "additionalContextLimit": 10000
+          }
+        ]
+      }
+    ]
+  }
+}

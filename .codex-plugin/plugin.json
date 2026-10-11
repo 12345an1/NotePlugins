@@ -1,0 +1,16 @@
+{
+  "name": "note-plugins",
+  "version": "0.1.0",
+  "description": "Local note-taking and reading skills collection",
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Note Plugins",
+    "shortDescription": "Use note-plugins skills in Codex.",
+    "longDescription": "Local collection of note-taking and reading skills.",
+    "developerName": "zga",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Use note-plugins skills when relevant."
+  }
+}

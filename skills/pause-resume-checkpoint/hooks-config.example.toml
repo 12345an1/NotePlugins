@@ -1,0 +1,15 @@
+# Codex 0.160.1 reads project hooks from the `[hooks]` table in config.toml,
+# NOT from `.codex/hooks.toml`. Each event value is an ARRAY of handlers
+# (not a bare inline table). Put this in `<project>/.codex/config.toml`
+# (or `~/.codex/config.toml` for a global default).
+#
+# `${PLUGIN_ROOT}` points at the plugin root. If your Codex does not expand it
+# in a project `[hooks]` table, replace it with the absolute path to your plugin
+# checkout, or rely on the plugin's own `hooks/hooks.json` instead.
+
+[hooks]
+Interrupt = [{ type = "command", command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/save_progress.py\"", async = true, timeout = 30, additionalContextLimit = 10000 }]
+
+SessionEnd = [{ type = "command", command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/session_end.py\"", timeout = 30, additionalContextLimit = 10000 }]
+
+PostToolUse = [{ matcher = "local_shell|shell", type = "command", command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/cleanup_completed_runs.py\"", async = true, timeout = 180, additionalContextLimit = 10000 }]

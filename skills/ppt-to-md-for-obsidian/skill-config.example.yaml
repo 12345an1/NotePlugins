@@ -1,0 +1,17 @@
+# Example configuration for scripts/ppt_to_obsidian_pipeline.py
+
+source: "examples/sample-course/raw"
+output_dir: "build/sample-course"
+mode: "course-notes"
+
+clean:
+  unicode_math: true
+
+conversion:
+  soffice: null
+  converted_dir: "converted_pptx"
+
+obsidian:
+  course_name: "示例课程"
+  overview_name: "00_课程总览.md"
+  create_review_placeholders: true

@@ -1,0 +1,14 @@
+# note-plugins project config
+#
+# Put this file in your Codex working directory (or a subdirectory); the hooks
+# find it by walking up from the session cwd. Everything note-plugins writes
+# lives under work_dir:
+#   <work_dir>/.codex-progress   checkpoints + session-end log
+#   <work_dir>/.ocr_work         OCR run work + raw visual output
+#
+# Relative paths resolve against this file's directory. Use a writable
+# directory when the project cwd is read-only (for example a plugin repo that
+# is mounted read-only inside the agent sandbox).
+
+[note_plugins]
+work_dir = "."

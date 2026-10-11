@@ -1,0 +1,4 @@
+interface:
+  display_name: "Math Physics Complete"
+  short_description: "Complete, checked formulas for math and physics answers"
+  default_prompt: "Use $math-physics-complete for complete rendered formulas where every symbol, assumption, unit, and boundary condition is defined and checked."

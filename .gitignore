@@ -1,0 +1,19 @@
+# Runtime / intermediate artifacts — must never be committed to the repo.
+# The hooks recreate these in the working directory as you use the plugin.
+
+# Progress checkpoints + session-end log (pause-resume-checkpoint hooks)
+.codex-progress/
+
+# OCR run work, rendered pages, and internal JSON/quality artifacts
+.ocr_work/
+.ocr_output/
+
+# Payload-safe batching work
+.payload_work/
+
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+
+# OS / editor cruft
+.DS_Store

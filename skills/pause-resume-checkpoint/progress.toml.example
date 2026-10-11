@@ -1,0 +1,17 @@
+# note-plugins progress config
+#
+# Where the Interrupt/SessionEnd hooks write their progress files.
+#   base_dir unset/empty -> use the session's own cwd (<cwd>/.codex-progress)
+#   base_dir set         -> always write to <base_dir>/.codex-progress
+#
+# Point base_dir at a writable directory when the project cwd is read-only
+# (for example note-plugins is mounted read-only inside the agent sandbox).
+#
+# NOTE: this is a template. Replace the placeholder below with your OWN writable
+# path before use. If you leave base_dir empty, the hooks fall back to the
+# session cwd (<cwd>/.codex-progress), which is usually what you want.
+
+[progress]
+# TODO(you): set this to a writable directory on your machine, e.g.:
+#   base_dir = "/home/<your-user>/Documents/NoteBookWorkplace"
+base_dir = ""

@@ -1,0 +1,51 @@
+# Copy the `[hooks]` table below into `<project>/.codex/config.toml`.
+# Codex 0.160.1 reads project hooks from config.toml's `[hooks]` table,
+# NOT from `.codex/hooks.toml`.
+#
+# Paths use `${PLUGIN_ROOT}` to point at the plugin root. If your Codex does not
+# expand `${PLUGIN_ROOT}` in a project-level `[hooks]` table, replace it with the
+# absolute path to your plugin checkout (or just rely on the plugin's own
+# `hooks/hooks.json`, which is the recommended setup).
+#
+# Each event's value is an ARRAY of matcher groups; each group contains a
+# `hooks` array of command handlers. A bare inline table (type/command/timeout
+# written directly under the event) gets silently dropped, so keep this nesting.
+#
+# The scripts are standard-library Python; system python3 is fine.
+
+[hooks]
+
+[[hooks.Interrupt]]
+[[hooks.Interrupt.hooks]]
+type = "command"
+command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/save_progress.py\""
+async = true
+timeout = 30
+additionalContextLimit = 10000
+
+# Early warning for the API payload limit: snapshot progress right before the
+# context is compacted (the moment a request is most likely to trip a 413
+# "Payload Too Large: Failed to buffer the request body").
+[[hooks.PreCompact]]
+[[hooks.PreCompact.hooks]]
+type = "command"
+command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/save_progress.py\""
+async = true
+timeout = 30
+additionalContextLimit = 10000
+
+[[hooks.SessionEnd]]
+[[hooks.SessionEnd.hooks]]
+type = "command"
+command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/session_end.py\""
+timeout = 30
+additionalContextLimit = 10000
+
+[[hooks.PostToolUse]]
+matcher = "shell|local_shell|exec_command|Bash"
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = "python3 \"${PLUGIN_ROOT}/skills/pause-resume-checkpoint/scripts/cleanup_completed_runs.py\""
+async = true
+timeout = 180
+additionalContextLimit = 10000

@@ -1,0 +1,7 @@
+interface:
+  display_name: "PPT/PDF to Obsidian Notes"
+  short_description: "Convert courseware into source-checked Obsidian notes"
+  default_prompt: "Use $ppt-to-md-for-obsidian to convert these lecture slides or PDFs into source-checked Obsidian notes with explained formulas, source-labeled examples, scoped claims, navigation, and review pages."
+
+policy:
+  allow_implicit_invocation: true
