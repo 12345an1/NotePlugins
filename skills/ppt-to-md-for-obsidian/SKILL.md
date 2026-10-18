@@ -1,6 +1,6 @@
 ---
 name: ppt-to-md-for-obsidian
-description: Use when the starting source is local PPT/PPTX/PDF lecture courseware or slide-derived files and the user wants extracted text, Obsidian Markdown course notes, source coverage, formulas, examples, or review pages; Chinese triggers include PPT转笔记, 课件转Markdown, PDF课件整理. Use $web-course-notes-for-obsidian instead for URL or web-source collection; use $obsidian-vault-organizer for vault cleanup that no longer needs courseware extraction.
+description: Use when the starting source is local PPT/PPTX/PDF lecture courseware or slide-derived files and the user wants extracted text, Obsidian Markdown course notes, source coverage, formulas, examples, or review pages; Chinese triggers include PPT转笔记, 课件转Markdown, PDF课件整理. Once notes are drafted and only cleanup remains, use $note-postprocess instead.
 ---
 
 # PPT To Markdown For Obsidian
@@ -20,15 +20,17 @@ If that binary is missing, verify that `conda run` resolves to the same environm
 ## Goal
 Convert slide-based course material into an Obsidian note system, not a raw slide transcript. The output should be readable as standalone study notes with concept explanation, mechanisms, formulas, examples, boundaries, and useful cross-links.
 
-When writing into an existing project or vault, first load project-local guidance such as `AGENT.md`, `agent.md`, and files under `agent/`. Treat project-local guidance and scripts as the source of truth when they are stricter or more current than this skill. Keep source files read-only unless the user explicitly asks to rename, move, or delete them. For vault-only organization work, use `$obsidian-vault-organizer`.
+When writing into an existing project or vault, first load project-local guidance such as `AGENT.md`, `agent.md`, and files under `agent/`. Treat project-local guidance and scripts as the source of truth when they are stricter or more current than this skill. Keep source files read-only unless the user explicitly asks to rename, move, or delete them. For vault-only organization work, use `$note-postprocess`.
 
-When updating this skill itself, edit only the source skill repository. From the skills repository root, run `python3 scripts/validate_all.py --skill ppt-to-md-for-obsidian`, then inspect source and installed state with `python3 scripts/update_installed_skills.py --skill ppt-to-md-for-obsidian --dry-run --prune --self-check`. Deploy only when the user explicitly authorizes it, from the same repository root with `python3 scripts/update_installed_skills.py --skill ppt-to-md-for-obsidian --prune --self-check`; never edit the installed copy directly.
+When updating this skill itself, edit only the source skill repository, never the installed copy under `~/.codex/plugins/cache/`. Validate the bundle from the skill root with `python3 scripts/validate_skill_repo.py`, then refresh the installed copy through the plugin marketplace (`codex plugin add note-plugins@personal`) only when the user explicitly authorizes it.
 
 When a target vault follows solvenotes-style conventions, read `references/solvenotes-profile.md` before validation or source-evidence work. Solvenotes keeps self-contained `source_manifest.md` files outside Notes, under `SOLVENOTES_MANIFEST_ROOT` or `Notes.parent / "vault_sources"` by default, mirroring each course/topic path relative to Notes. Reject a manifest root inside Notes, including symlink resolutions. Keep private mappings out of the public Skills repository. Preserve `source_files`, source URLs, and page/slide markers in notes. Missing required manifests are FAIL/unavailable, never an empty PASS. Solvenotes also forbids `99_内容覆盖审查.md` and `coverage_audit` pages; other vaults retain their local provenance layout.
 
 ## Handoff Boundaries
 
-Use this skill while source extraction or slide-order reconstruction is still part of the task. Once notes have been drafted and the remaining work is only link repair, duplicate cleanup, navigation restructuring, or vault-wide validation, switch to `$obsidian-vault-organizer`. If the user starts from public URLs instead of local files, use `$web-course-notes-for-obsidian` first and return here only after a permitted PPT/PDF has become a local source file.
+Use this skill while source extraction, slide-order reconstruction, or the first full rewrite of the notes is still part of the task. Once the notes have been drafted and the remaining work is only duplicate-heading cleanup, link repair, navigation restructuring, or vault-wide validation, switch to `$note-postprocess`.
+
+If the source is a public URL or web page instead of a local file, obtain a permitted local copy of the courseware first; this skill works from local PPT/PPTX/PDF files.
 
 ## Quick Start
 
@@ -121,6 +123,7 @@ If the user explicitly asks for one exam review file instead of two review pages
 
 4. Rewrite into primary notes.
    - Use Chinese as the main language; keep standard English terms such as `Transformer`, `BERT`, `CLIP`, `SVM`.
+   - Use ATX headings everywhere. The note title is one `# 标题`, every level-2 section must be written as `## 标题` (a `##` prefix followed by a space), and deeper sections use `###`/`####`. Never use bold text, plain lines, or setext underlines (`===` / `---`) as section titles: Obsidian's outline and heading anchors only locate real `#`-prefixed headings.
    - Convert bullet fragments into continuous explanations.
    - Add variables and assumptions directly after formulas.
    - Use `$$ ... $$` for block formulas.

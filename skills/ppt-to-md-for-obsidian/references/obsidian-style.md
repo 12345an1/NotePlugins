@@ -16,6 +16,13 @@
 - Do not keep generic slide phrases if they do not help learning.
 - Add examples or boundary cases when a concept is easy to misuse.
 
+## Headings
+
+- Give each note exactly one H1: `# 笔记标题`.
+- Write every level-2 section as `## 标题`, with the `##` prefix and a space after it. Use `###` only for real sub-sections.
+- Never use bold text, plain lines, or setext underlines (`===` / `---`) as section titles. Obsidian's outline/TOC only indexes ATX headings, and the bundled heading tools (dedup, link anchors) parse `#` prefixes.
+- Do not skip levels to style text: use `##` for main sections even when you want a smaller visual size.
+
 ## Formulas
 
 - Use block math:

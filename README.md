@@ -27,6 +27,7 @@
 | --- | --- | --- |
 | `courseware-to-notes` | 顶层路由：判断课件类型，分发到对应技能，并强制统一运行环境 | 把课件转成笔记、整理老师课件 |
 | `ppt-to-md-for-obsidian` | PPT/PPTX/PDF 课件 → Obsidian 风格 Markdown 课程笔记 | PPT转笔记、课件转Markdown |
+| `note-postprocess` | 成稿后清理：重复大标题去重、链接修复、导航整理、全库校验 | 笔记去重、重复大标题、整理笔记库 |
 | `pdf-ocr-to-markdown` | PDF/图片 → Markdown（含 OCR、表格、图、公式结构） | OCR、识别PDF、图片转文字 |
 | `math-physics-complete` | 公式/物理/数学内容的严谨化（符号、单位、边界条件） | 公式推导、物理建模、量纲分析 |
 | `pause-resume-checkpoint` | 进度断点保存与恢复（`暂停/继续`） | 暂停、保存进度、继续、恢复 |
@@ -263,6 +264,22 @@ work_dir = "."
 
 在 Codex 会话里说 `暂停` / `保存进度` / `stop`，或按 `Esc` 中断：`Interrupt` 钩子会把检查点写到 `<work_dir>/.codex-progress/checkpoint.md`（含目标、阶段、已完成、下一步、阻塞项）。说 `继续` / `恢复` / `resume` 时读取该文件并从下一步接着做。上下文变大触发压缩前，`PreCompact` 钩子也会先存一次进度，作为 413 的早期预警。
 
+### 4.5 成稿后清理（重复大标题去重）
+
+笔记写完后再做，不参与课件抽取。重复大标题指的是「笔记标题和紧随其后的同名小节标题」或「同一小节标题连续出现两次」。先看报告，再就地修复：
+
+```bash
+# 只报告；有文件需要改动时退出码为 1
+"$NOTE_PY" "$PLUGIN_REPO/skills/note-postprocess/scripts/dedupe_headings.py" \
+  "notes/课程名" --check
+
+# 就地修复（默认行为）
+"$NOTE_PY" "$PLUGIN_REPO/skills/note-postprocess/scripts/dedupe_headings.py" \
+  "notes/课程名"
+```
+
+只有三条同时满足才删：文字归一化后相同（忽略全/半角、大小写、首尾空白、结尾 `#`、`{#id}` 和结尾冒号）、两个标题之间除了空行没有任何正文、后一个标题层级不浅于前一个。中间有内容重名的标题会被保留；frontmatter 和代码块内的 `#` 不当作标题。修复后建议重新跑一次链接与结构检查（见 `skills/ppt-to-md-for-obsidian/scripts/`）。
+
 ---
 
 ## 5. 输出结构
@@ -331,6 +348,7 @@ note-plugins/
   skills/
     courseware-to-notes/           # 顶层路由 + 运行时规则
     ppt-to-md-for-obsidian/        # PPT/PPTX/PDF -> Obsidian 笔记（含 scripts/ 与 tests/）
+    note-postprocess/              # 成稿后清理：重复标题去重 + 校验（含 scripts/ 与 tests/）
     pdf-ocr-to-markdown/           # PDF/图片 OCR（提取/渲染/分类/合并/清理/视觉预览）
     math-physics-complete/         # 数学/物理公式严谨化
     pause-resume-checkpoint/       # 进度断点（脚本 + hooks 配置示例）
@@ -350,7 +368,7 @@ note-plugins/
 
 ## 9. 许可
 
-- 本仓库自身（含 `courseware-to-notes`、`pause-resume-checkpoint`、`payload-safe-batch`、`math-physics-complete`）按根目录 [LICENSE](LICENSE) 授权：**MIT**。
+- 本仓库自身（含 `courseware-to-notes`、`note-postprocess`、`pause-resume-checkpoint`、`payload-safe-batch`、`math-physics-complete`）按根目录 [LICENSE](LICENSE) 授权：**MIT**。
 - 打包进来的第三方技能保留其原始许可与署名，详见 [NOTICE.md](NOTICE.md)：
   - `ppt-to-md-for-obsidian` — MIT，© 2026 blacksheep1118
   - `pdf-ocr-to-markdown` — MIT，© 2026 jaeseok11

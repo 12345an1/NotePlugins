@@ -55,6 +55,9 @@ Do not silently fall back to `python3` from `$PATH` or from `base`.
    - Respect that skill's vision-honesty rule: do not claim OCR complete when visual pages are still pending.
 3. Formula-heavy pages or physics/math review -> use `math-physics-complete`.
    - Apply its LaTeX/rendering, symbol-table, units, and boundary-condition contract.
+4. Notes already drafted, only cleanup left -> use `note-postprocess`.
+   - Remove redundant duplicate big headings with `skills/note-postprocess/scripts/dedupe_headings.py <notes-dir> --check`, then run it again without `--check` to fix.
+   - Reuse the checkers in `skills/ppt-to-md-for-obsidian/scripts/` (`check_obsidian_links.py`, `check_course_notes.py`) for link and structure validation instead of writing new ones.
 
 ## Default workflow
 
@@ -73,6 +76,7 @@ Do not silently fall back to `python3` from `$PATH` or from `base`.
 4. Rewrite raw extraction into editable notes, preserving source markers and slide/page boundaries.
 5. For formula-heavy content, pass the draft through `math-physics-complete` before finalizing.
 6. Leave the Markdown files in place for later small manual edits.
+   - When the remaining work is bulk cleanup rather than writing (duplicate headings, link repair, navigation, vault-wide checks), hand off to `note-postprocess`.
 
 ## Output expectations
 
@@ -90,6 +94,7 @@ notes/
 Every note should be self-contained enough to be edited later without the original script:
 
 - keep `source` frontmatter pointing to the original file;
+- write every section title as an ATX heading with the `#` prefix; level-2 sections must be `## 标题` (not bold text or setext underlines), so the Obsidian outline can locate them;
 - keep `## Slide N` or page-boundary markers for traceability;
 - preserve formulas as Obsidian-renderable math: `$...$` inline and `$$...$$` block (not `\(...\)` / `\[...\]`, which Obsidian shows as literal text);
 - for old or inherited notes that still use `\(...\)` / `\[...\]`, convert them in bulk with `ppt-to-md-for-obsidian/scripts/fix_math_delimiters.py <notes-dir>` (`--check` / `--dry-run` available);

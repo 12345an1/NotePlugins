@@ -1,0 +1,4 @@
+interface:
+  display_name: "Note Postprocess"
+  short_description: "Clean up drafted Obsidian notes: dedupe headings, fix links"
+  default_prompt: "Use $note-postprocess to clean up these drafted Obsidian notes: remove redundant duplicate headings, repair links, and re-validate the vault."
